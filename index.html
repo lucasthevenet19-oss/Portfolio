@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Thevenet - Mon Portfolio</title>
+    
+    <style>
+        /* ======================================= */
+        /* 1. RESET ET VARIABLES DE BASE */
+        /* ======================================= */
+        :root {
+            /* Couleurs par défaut (Mode Clair) - ROUGE/VIOLET/NOIR */
+            --color-primary: #99004C; /* Violet Profond (Base pour le dégradé) */
+            --color-secondary: #FF0066; /* Magenta Vif (Utilisé pour la couleur d'accentuation) */
+            --color-text-dark: #1f2937; /* Le noir/gris foncé */
+            --color-text-light: #4b5563; 
+            --color-background-light: #ffffff; 
+            --color-background-alt: #f7f9fb; 
+            --color-border: #e5e7eb; 
+            --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+            /* Couleurs arc-en-ciel pour le fond */
+            --color-red: #ff0000;
+            --color-orange: #ff7f00;
+            --color-yellow: #ffff00;
+            --color-green: #00ff00;
+            --color-blue: #0000ff;
+            --color-indigo: #4b0082;
+            --color-violet: #9400d3;
+
+            /* Espacements */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 3rem;
+            --spacing-xl: 4rem;
+            --radius-md: 0.5rem;
+        }
+
+        /* Définition du thème sombre (s'applique lorsque la classe est sur <body>) */
+        .dark-mode {
+            --color-text-dark: #f0f4f8; 
+            --color-text-light: #a5b4c4; 
+            --color-background-light: #1e293b; 
+            --color-background-alt: #0f172a; 
+            --color-border: #334155; 
+            --shadow-light: none; 
+        }
+
+        /* --------------------------------------- */
+        /* 1.1 FOND ARC-EN-CIEL ET ANIMATION */
+        /* --------------------------------------- */
+        
+        /* Animation de rotation pour l'effet arc-en-ciel */
+        @keyframes rainbow-rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Reset de base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            /* Changement de couleur de texte pour le blanc */
+            color: var(--color-background-light); 
+            line-height: 1.6;
+            
+            /* Styles de fond ARC-EN-CIEL (utilisé comme fallback) */
+            background-color: var(--color-background-light); 
+            background-image: conic-gradient(
+                from 0deg, 
+                var(--color-red), 
+                var(--color-orange), 
+                var(--color-yellow), 
+                var(--color-green), 
+                var(--color-blue), 
+                var(--color-indigo), 
+                var(--color-violet), 
+                var(--color-red)
+            );
+            background-size: cover;
+            background-attachment: fixed;
+            
+            position: relative;
+            overflow-x: hidden;
+            z-index: 1; 
+            transition: background-color 0.5s, color 0.5s, background-image 0.5s;
+        }
+        
+        /* En mode sombre, le texte redevient clair pour le contraste */
+        .dark-mode body {
+             color: var(--color-text-dark);
+        }
+
+        /* L'animation qui couvre tout l'écran, en arrière-plan */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50vh; 
+            left: -50vw; 
+            width: 200vw;
+            height: 200vh;
+            background: conic-gradient(
+                from 0deg, 
+                var(--color-red), 
+                var(--color-orange), 
+                var(--color-yellow), 
+                var(--color-green), 
+                var(--color-blue), 
+                var(--color-indigo), 
+                var(--color-violet), 
+                var(--color-red)
+            );
+            z-index: -1; /* Place le fond sous le contenu */
+            animation: rainbow-rotate 30s linear infinite;
+        }
+        
+        /* En mode sombre, on supprime l'arc-en-ciel pour la lisibilité */
+        .dark-mode body::before,
+        .dark-mode body {
+            background-image: none;
+            background-color: var(--color-background-light); 
+            animation: none;
+        }
+
+        /* Conteneur de centrage */
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: var(--spacing-md);
+            padding-right: var(--spacing-md);
+            /* z-index pour s'assurer que le contenu est au-dessus du fond animé */
+            position: relative; 
+            z-index: 2; 
+        }
+
+        /* Style de base des sections */
+        .section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        /* Rendre toutes les sections TRANSPARENTES */
+        .section--light, .section, .section--alt {
+            background-color: transparent; 
+            box-shadow: none; 
+            z-index: 5;
+            position: relative;
+        }
+        
+        /* Les titres doivent être très lisibles (couleur blanche) */
+        h1, h2, h3 {
+            color: var(--color-background-light); 
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.2;
+            /* Ombre forte pour assurer le contraste sur l'arc-en-ciel */
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6); 
+        }
+        
+        /* En mode sombre, les titres redeviennent sombres */
+        .dark-mode h1, .dark-mode h2, .dark-mode h3 {
+             color: var(--color-text-dark);
+             text-shadow: 1px 1px 2px rgba(255,255,255,0.1);
+        }
+        
+        /* Ajustement de la couleur des paragraphes pour le blanc */
+        p {
+            color: var(--color-background-light);
+            margin-bottom: var(--spacing-sm);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.4); 
+        }
+        
+        .dark-mode p {
+             color: var(--color-text-dark);
+             text-shadow: none;
+        }
+
+        /* Espace après la description des projets */
+        #projects .container > p:nth-of-type(1) {
+            margin-bottom: var(--spacing-xl); /* Augmenté à 4rem */
+        }
+        
+        /* ======================================= */
+        /* 2. HEADER ET NAVIGATION (OPAQUE) */
+        /* ======================================= */
+        .site-header {
+            /* Le header reste opaque pour une lecture facile de la navigation */
+            background-color: var(--color-background-light); 
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+        }
+
+        /* Nouveau style du logo */
+        .logo {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--color-text-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav__links {
+            list-style: none;
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        /* Liens de navigation en noir et en gras */
+        .nav__links a {
+            text-decoration: none;
+            color: var(--color-text-dark); /* Couleur noire/gris foncé */
+            font-weight: 700; /* Gras */
+            transition: color 0.2s;
+        }
+
+        .nav__links a:hover {
+            color: var(--color-primary);
+        }
+        
+        .theme-toggle {
+            background-color: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-light);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--color-background-alt);
+        }
+
+        /* ======================================= */
+        /* 3. COMPOSANTS (BOUTONS & CARTES) */
+        /* ======================================= */
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s;
+            border: none;
+        }
+
+        .btn--primary {
+            /* DÉGRADÉ VIOLET/MAGENTA */
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-background-light);
+            box-shadow: var(--shadow-light);
+        }
+
+        .btn--primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn--ghost {
+            /* Les boutons doivent rester opaques pour la lisibilité */
+            background-color: var(--color-background-light);
+            color: var(--color-text-dark);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .dark-mode .btn--ghost {
+            background-color: var(--color-background-alt);
+        }
+
+        .btn--ghost:hover {
+            background-color: var(--color-background-alt);
+        }
+
+        .btn--submit {
+            /* DÉGRADÉ VIOLET/MAGENTA */
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-background-light);
+            box-shadow: var(--shadow-light);
+            margin-top: var(--spacing-md); 
+        }
+
+        .card {
+            /* Les cartes doivent rester opaques pour la lisibilité */
+            background-color: var(--color-background-light);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--color-border);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s, border-color 0.3s;
+        }
+
+        .dark-mode .card {
+            background-color: var(--color-background-light);
+            border-color: var(--color-border);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Rétablissement des couleurs du texte DANS les cartes */
+        .card h3, .card p, .card small {
+            color: var(--color-text-dark); 
+            text-shadow: none;
+        }
+        
+        .dark-mode .card h3, .dark-mode .card p, .dark-mode .card small {
+            color: var(--color-text-dark);
+        }
+
+        .skills-grid .card h3 {
+            color: var(--color-primary);
+        }
+
+        /* ======================================= */
+        /* 4. SECTION HERO */
+        /* ======================================= */
+        .hero {
+            display: flex;
+            align-items: center;
+            padding-top: var(--spacing-xl);
+            padding-bottom: var(--spacing-xl);
+            min-height: 80vh;
+            gap: var(--spacing-xl);
+        }
+
+        .hero__content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero__content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero__content > p:first-child {
+            /* Ce paragraphe doit rester blanc pour le contraste */
+            color: var(--color-background-light); 
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .hero__content .btn {
+            margin-right: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .hero__visual {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .visual-placeholder {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            /* Garder cette zone semi-transparente pour l'effet */
+            background: radial-gradient(circle at 10% 20%, #99004C40 0%, #FF006640 100%);
+            box-shadow: var(--shadow-light);
+            z-index: 10; /* Assurer que le visuel est au-dessus */
+        }
+        
+        .dark-mode .visual-placeholder {
+             /* DÉGRADÉ VIOLET/MAGENTA (plus opaque en mode sombre) */
+            background: radial-gradient(circle at 90% 80%, #99004C60 0%, #FF006660 100%);
+        }
+
+        .availability-tag {
+            position: absolute;
+            bottom: 20px;
+            /* Garder les tags opaques */
+            background-color: var(--color-text-dark);
+            color: var(--color-background-light);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        .dark-mode .availability-tag {
+            background-color: var(--color-text-light);
+            color: var(--color-background-alt);
+        }
+
+        /* ======================================= */
+        /* 5. SECTIONS GRILLES (Compétences & Projets) */
+        /* ======================================= */
+        .skills-grid, .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .project small {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .project--hidden {
+            display: none;
+        }
+
+        [data-action="show-more-projects"] {
+            display: block;
+            margin: var(--spacing-lg) auto 0;
+            /* Garder le bouton opaque */
+            background-color: var(--color-background-light);
+            color: var(--color-text-dark);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-light);
+        }
+        
+        [data-action="show-more-projects"]:hover {
+             background-color: var(--color-background-alt);
+        }
+
+
+        /* ======================================= */
+        /* 6. SECTION CONTACT (CENTRE) */
+        /* ======================================= */
+        .contact-container {
+            text-align: center; 
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin-top: var(--spacing-lg);
+            margin-left: auto;
+            margin-right: auto;
+            
+            /* Garder le formulaire opaque */
+            background-color: var(--color-background-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--color-border);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .dark-mode .contact-form {
+            background-color: var(--color-background-light);
+            border-color: var(--color-border);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+            text-align: left; 
+        }
+
+        .form-group label {
+            /* Rétablir les labels en couleur sombre pour la lisibilité sur le fond clair du formulaire */
+            color: var(--color-text-dark); 
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            /* Garder les champs opaques */
+            background-color: var(--color-background-alt);
+            color: var(--color-text-dark);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .dark-mode .contact-form input,
+        .dark-mode .contact-form textarea {
+            background-color: var(--color-background-alt);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+        }
+        
+        .btn--submit {
+             /* DÉGRADÉ VIOLET/MAGENTA */
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            color: var(--color-background-light);
+            box-shadow: var(--shadow-light);
+            display: block; 
+            margin-top: var(--spacing-md); 
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 200px;
+        }
+
+
+        /* ======================================= */
+        /* 7. FOOTER */
+        /* ======================================= */
+        .site-footer {
+            /* Le footer reste transparent */
+            background-color: transparent; 
+            /* MODIFICATION CLÉ : Suppression de la bordure du haut (le séparateur) */
+            border-top: none; 
+            padding: var(--spacing-md) 0;
+            text-align: center;
+            /* Rétablir la couleur du texte du footer en blanc */
+            color: var(--color-background-light);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4); 
+            font-size: 0.9rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .dark-mode .site-footer {
+             color: var(--color-text-light);
+             text-shadow: none;
+        }
+
+        /* ======================================= */
+        /* 8. RESPONSIVE SIMPLE (Mobile) */
+        /* ======================================= */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: var(--spacing-lg);
+                padding-bottom: var(--spacing-lg); /* Ajustement pour mobile */
+                min-height: auto;
+            }
+
+            .hero__visual {
+                order: -1;
+                margin-bottom: var(--spacing-lg);
+            }
+            
+            .hero__content .btn {
+                margin-top: var(--spacing-sm);
+                display: block;
+                margin-left: 0;
+                margin-right: 0;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                gap: var(--spacing-sm);
+                justify-content: center;
+            }
+
+            .logo, .theme-toggle {
+                flex-basis: 100%;
+                text-align: center;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            .btn--submit {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header"> 
+        <nav class="nav container">
+            <span class="logo">
+                Mon Portfolio
+            </span>
+            <ul class="nav__links">
+                <li><a href="#hero">Accueil</a></li>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#skills">Compétences</a></li>
+                <li><a href="#projects">Projets</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="theme-toggle">Mode sombre</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero container">
+            <div class="hero__content">
+                <p>BONJOUR, JE SUIS</p>
+                <h1>Lucas Thevenet</h1>
+                <p>Développeur web passionné par le HTML, le CSS et le JavaScript. Ce portfolio présente mes premiers projets et mon parcours.</p>
+                <a href="#projects" class="btn btn--primary">Voir mes projets</a>
+                <a href="#contact" class="btn btn--ghost">Me contacter</a>
+            </div>
+            <div class="hero__visual">
+                <div class="visual-placeholder"></div>
+                <div class="availability-tag">Disponible pour une alternance </div>
+            </div>
+        </section>
+
+        <section id="about" class="section section--light">
+            <div class="container">
+                <h2>À propos</h2>
+                <p>Je suis étudiant en informatique et j'apprends les bases du développement web. J'aime construire des interfaces simples, lisibles, et modernes. Ce portfolio est mon premier projet complet en HTML / CSS / JavaScript :</p>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="container">
+                <h2>Compétences</h2>
+                <div class="skills-grid">
+                    <article class="card">
+                        <h3>HTML</h3>
+                        <p>Structure des pages, balises sémantiques, liens, images, listes, formulaires...</p>
+                    </article>
+                    <article class="card">
+                        <h3>CSS</h3>
+                        <p>Mise en page responsive, couleurs, typographie, flexbox, animations simples.</p>
+                        <p>
+                        </p>
+                    </article>
+                    <article class="card">
+                        <h3>JavaScript</h3>
+                        <p>Manipulation du DOM événements, petites interactions pour rendre la page interactive.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section section--alt">
+            <div class="container">
+                <h2>Projets</h2>
+                <p>Voici quelques projets réalisés pendant mon apprentissage. Ils évoluent au fur et à mesure que j'apprends de nouvelles techniques.</p>
+                <div class="projects-grid">
+                    <article class="card project">
+                        <h3>Site Internet</h3>
+                        <p>Création d'un site web simple pour une petite entreprise locale.                      </p>
+                        <p><small>HTML / CSS</small></p>
+                    </article>
+                    <article class="card project">
+                        <h3>Mini landing page</h3>
+                        <p>Une page d'accueil pour un faux produit, avec sections et boutons d'appel à l'action.</p>
+                        <p><small>HTML / CSS</small></p>
+                    </article>
+                    <article class="card project">
+                        <h3>Portfolio (ce site)</h3>
+                        <p>Ce portfolio, développé en plusieurs étapes : HTML, CSS puis JavaScript.</p>
+                        <p><small>HTML / CSS / JS</small></p>
+                    </article>
+                    <article class="card project project--hidden">
+                        <h3>Projet Arduino</h3>
+                        <p>Création d'un projet Arduino avec capteurs et actionneurs.</p>
+                        <p><small>Arduino, croquis </small></p>
+                    </article>
+                    <article class="card project project--hidden">
+                        <h3>Portfolio personnelle</h3>
+                        <p>Portfolio personnel, développé en HTML et CSS.</p>
+                        <p><small>HTML / CSS</small></p>
+                    </article>
+                </div>
+                <button class="btn" data-action="show-more-projects">Voir plus de projets</button>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container contact-container">
+                <h2>Contact</h2>
+                <p>Vous pouvez me contacter pour un stage, une alternance ou toute autre opportunité.</p>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nom</label>
+                        <input type="text" id="name" name="name" placeholder="Votre nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Adresse e-mail</label>
+                        <input type="email" id="email" name="email" placeholder="vous@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Votre message..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn--submit">Envoyer</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Lucas Thevenet – Portfolio</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. GESTION DU MODE SOMBRE (Dark Mode)
+            const themeToggle = document.querySelector('.theme-toggle');
+            const darkThemeClass = 'dark-mode';
+
+            function applySavedTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add(darkThemeClass);
+                    themeToggle.textContent = 'Mode clair';
+                } else {
+                    document.body.classList.remove(darkThemeClass);
+                    themeToggle.textContent = 'Mode sombre';
+                }
+            }
+
+            function toggleTheme() {
+                document.body.classList.toggle(darkThemeClass);
+
+                if (document.body.classList.contains(darkThemeClass)) {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.textContent = 'Mode clair';
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.textContent = 'Mode sombre';
+                }
+            }
+
+            applySavedTheme();
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+
+            // 2. GESTION DE L'AFFICHAGE DES PROJETS SUPPLÉMENTAIRES
+            const showMoreButton = document.querySelector('[data-action="show-more-projects"]');
+            const hiddenProjects = document.querySelectorAll('.project--hidden');
+
+            function showHiddenProjects() {
+                hiddenProjects.forEach(project => {
+                    project.classList.remove('project--hidden');
+                });
+                showMoreButton.style.display = 'none';
+            }
+
+            if (showMoreButton) {
+                showMoreButton.addEventListener('click', showHiddenProjects);
+            }
+        });
+    </script>
+
+</body>
+</html>
